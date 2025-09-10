@@ -1,0 +1,129 @@
+<!-- Version alternative avec surlignage précis du texte -->
+<UserControl.Resources>
+    <localConverters:HighlightConverter x:Key="HighlightConverter"/>
+    <localConverters:TextHighlightConverter x:Key="TextHighlightConverter"/>
+    
+    <!-- Templates avec surlignage précis du texte -->
+    <DataTemplate x:Key="ErrorTemplate">
+        <Grid Background="Red">
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <MultiBinding Converter="{StaticResource TextHighlightConverter}">
+                                    <Binding Path="."/>
+                                    <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </ContentControl.Content>
+                        </ContentControl>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BreachedTemplate">
+        <Grid Background="#C53A3A">
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <MultiBinding Converter="{StaticResource TextHighlightConverter}">
+                                    <Binding Path="."/>
+                                    <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </ContentControl.Content>
+                        </ContentControl>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="WarningTemplate">
+        <Grid Background="#EBBF14">
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <MultiBinding Converter="{StaticResource TextHighlightConverter}">
+                                    <Binding Path="."/>
+                                    <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </ContentControl.Content>
+                        </ContentControl>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ExemptTemplate">
+        <Grid Background="Yellow">
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <MultiBinding Converter="{StaticResource TextHighlightConverter}">
+                                    <Binding Path="."/>
+                                    <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </ContentControl.Content>
+                        </ContentControl>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="PassedTemplate">
+        <Grid Background="#67AC53">
+            <ContentPresenter Content="{Binding}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl>
+                            <ContentControl.Content>
+                                <MultiBinding Converter="{StaticResource TextHighlightConverter}">
+                                    <Binding Path="."/>
+                                    <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </ContentControl.Content>
+                        </ContentControl>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+
+    <!-- Version simplifiée avec overlay de surlignage -->
+    <DataTemplate x:Key="ErrorTemplateSimple">
+        <Grid>
+            <!-- Fond coloré original -->
+            <Border Background="Red" Padding="5,2">
+                <TextBlock Text="{Binding}" Foreground="White"/>
+            </Border>
+            <!-- Overlay de surlignage -->
+            <Border Opacity="0.3" Padding="5,2">
+                <Border.Background>
+                    <MultiBinding Converter="{StaticResource HighlightConverter}">
+                        <Binding Path="."/>
+                        <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    </MultiBinding>
+                </Border.Background>
+                <TextBlock Text="{Binding}" Foreground="Transparent"/>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <!-- Sélecteur de template mis à jour -->
+    <localConverters:DealStateTemplateSelector x:Key="logTemplateSelector"
+                                               ErrorTemplate="{StaticResource ErrorTemplate}"
+                                               BreachedTemplate="{StaticResource BreachedTemplate}"
+                                               WarningTemplate="{StaticResource WarningTemplate}"
+                                               ExemptTemplate="{StaticResource ExemptTemplate}"
+                                               PassedTemplate="{StaticResource PassedTemplate}"/>
+</UserControl.Resources>
