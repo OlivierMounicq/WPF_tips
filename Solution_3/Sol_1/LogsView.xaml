@@ -1,0 +1,165 @@
+<UserControl x:Class="MyCompany.WPF.TestHarness.Views.LogsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:MyCompany.WPF.TestHarness.Controls"
+             xmlns:localConverters="clr-namespace:MyCompany.WPF.TestHarness.Converters"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
+
+    <UserControl.Resources>
+        <localConverters:HighlightConverter x:Key="HighlightConverter"/>
+        
+        <!-- Templates existants modifiés avec overlay de surlignage -->
+        <DataTemplate x:Key="ErrorTemplate">
+            <Grid>
+                <!-- Fond coloré original -->
+                <Grid Background="Red">
+                    <TextBlock Text="{Binding}" Foreground="White" Padding="5,2"/>
+                </Grid>
+                <!-- Overlay de surlignage -->
+                <Border>
+                    <Border.Background>
+                        <MultiBinding Converter="{StaticResource HighlightConverter}">
+                            <Binding Path="."/>
+                            <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                        </MultiBinding>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BreachedTemplate">
+            <Grid>
+                <Grid Background="#C53A3A">
+                    <TextBlock Text="{Binding}" Foreground="White" Padding="5,2"/>
+                </Grid>
+                <Border>
+                    <Border.Background>
+                        <MultiBinding Converter="{StaticResource HighlightConverter}">
+                            <Binding Path="."/>
+                            <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                        </MultiBinding>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WarningTemplate">
+            <Grid>
+                <Grid Background="#EBBF14">
+                    <TextBlock Text="{Binding}" Foreground="Black" Padding="5,2"/>
+                </Grid>
+                <Border>
+                    <Border.Background>
+                        <MultiBinding Converter="{StaticResource HighlightConverter}">
+                            <Binding Path="."/>
+                            <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                        </MultiBinding>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ExemptTemplate">
+            <Grid>
+                <Grid Background="Yellow">
+                    <TextBlock Text="{Binding}" Foreground="Black" Padding="5,2"/>
+                </Grid>
+                <Border>
+                    <Border.Background>
+                        <MultiBinding Converter="{StaticResource HighlightConverter}">
+                            <Binding Path="."/>
+                            <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                        </MultiBinding>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PassedTemplate">
+            <Grid>
+                <Grid Background="#67AC53">
+                    <TextBlock Text="{Binding}" Foreground="White" Padding="5,2"/>
+                </Grid>
+                <Border>
+                    <Border.Background>
+                        <MultiBinding Converter="{StaticResource HighlightConverter}">
+                            <Binding Path="."/>
+                            <Binding Path="DataContext.FilterText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                        </MultiBinding>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <!-- Sélecteur de template existant -->
+        <localConverters:DealStateTemplateSelector x:Key="logTemplateSelector"
+                                                   ErrorTemplate="{StaticResource ErrorTemplate}"
+                                                   BreachedTemplate="{StaticResource BreachedTemplate}"
+                                                   WarningTemplate="{StaticResource WarningTemplate}"
+                                                   ExemptTemplate="{StaticResource ExemptTemplate}"
+                                                   PassedTemplate="{StaticResource PassedTemplate}"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Zone de texte pour filtrer -->
+        <TextBox Grid.Row="0" 
+                 x:Name="FilterBox"
+                 Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="5"
+                 Height="25">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border Background="White" BorderBrush="Gray" BorderThickness="1">
+                                    <Grid>
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                        <TextBlock Text="Filtrer les logs..." 
+                                                   Foreground="Gray" 
+                                                   IsHitTestVisible="False"
+                                                   Margin="5,0"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=FilterBox}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="Visibility" Value="Hidden"/>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <controls:LoggingListView x:Name="logsListBox"
+                                    ItemsSource="{Binding Logs}"
+                                    ItemTemplateSelector="{StaticResource logTemplateSelector}"
+                                    SelectionMode="Extended"
+                                    Background="#3C5C5C">
+                
+                <controls:LoggingListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Foreground" Value="Blue"/>
+                    </Style>
+                </controls:LoggingListView.ItemContainerStyle>
+            </controls:LoggingListView>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
