@@ -1,0 +1,26 @@
+<!-- Try replacing your ErrorTemplate with this version -->
+
+<DataTemplate x:Key="ErrorTemplate">
+    <Grid Background="Red" Padding="5,2">
+        <ContentPresenter x:Name="contentPresenter">
+            <ContentPresenter.Content>
+                <MultiBinding Converter="{StaticResource TextHighlightConverter}" 
+                              NotifyOnSourceUpdated="True">
+                    <Binding Path="." Mode="OneWay"/>
+                    <Binding Path="DataContext.FilterText" 
+                             RelativeSource="{RelativeSource AncestorType=UserControl}" 
+                             Mode="OneWay"
+                             UpdateSourceTrigger="PropertyChanged"/>
+                    <Binding Source="White" />
+                </MultiBinding>
+            </ContentPresenter.Content>
+        </ContentPresenter>
+    </Grid>
+    <DataTemplate.Triggers>
+        <!-- Force refresh when FilterText changes -->
+        <DataTrigger Binding="{Binding DataContext.FilterText, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                     Value="{x:Null}">
+            <Setter TargetName="contentPresenter" Property="Tag" Value="Refresh"/>
+        </DataTrigger>
+    </DataTemplate.Triggers>
+</DataTemplate>
