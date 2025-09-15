@@ -1,0 +1,58 @@
+<Window x:Class="YourApp.MainWindow"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:local="clr-namespace:YourApp"
+Title="Grid Background Binding with Match" Height="400" Width="450">
+
+<Window.Resources>
+    <!-- Register the converters -->
+    <local:TextToBrushConverter x:Key="TextToBrushConverter"/>
+    <local:TextMatchToBrushConverter x:Key="TextMatchToBrushConverter"/>
+</Window.Resources>
+
+<StackPanel Margin="20">
+    <Label Content="Enter a color in the first textbox:"/>
+    
+    <!-- First TextBox for color input -->
+    <TextBox x:Name="ColorTextBox" 
+             Text="Red" 
+             Margin="0,5,0,10"/>
+    
+    <!-- Grid with bound background based on matching values -->
+    <Grid Height="150" Margin="0,0,0,15">
+        <Grid.Background>
+            <MultiBinding Converter="{StaticResource TextMatchToBrushConverter}">
+                <Binding ElementName="ColorTextBox" Path="Text"/>
+                <Binding ElementName="MatchTextBox" Path="Text"/>
+            </MultiBinding>
+        </Grid.Background>
+        
+        <!-- Second TextBox inside the Grid -->
+        <TextBox x:Name="MatchTextBox" 
+                 Width="200" 
+                 Height="30"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center"
+                 Text=""
+                 FontSize="14"/>
+    </Grid>
+    
+    <StackPanel>
+        <TextBlock Text="Instructions:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBlock Text="• Enter a color name or hex code in the first textbox" 
+                   Margin="0,2"/>
+        <TextBlock Text="• Type the same value in the textbox inside the grid" 
+                   Margin="0,2"/>
+        <TextBlock Text="• When values match: Grid shows the specified color" 
+                   Margin="0,2"/>
+        <TextBlock Text="• When values don't match: Grid shows light coral (red)" 
+                   Margin="0,2"/>
+        <TextBlock Text="• Try: Red, Blue, Green, #FF5733, #80FF0000" 
+                   Margin="0,5,0,0" 
+                   FontStyle="Italic" 
+                   Foreground="Gray"/>
+    </StackPanel>
+</StackPanel>
+
+
+</Window>
