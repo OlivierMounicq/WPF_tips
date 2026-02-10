@@ -195,9 +195,10 @@ public class ScheduledJobService : BackgroundService
 }
 ```
 
-Key Features
-	1.	Atomic Operations: Uses MongoDB’s FindOneAndUpdate for atomic lock acquisition
-	2.	Automatic Expiration: TTL index ensures locks don’t stay forever if a container crashes
-	3.	Lock Extension: Can extend lock for long-running jobs
-	4.	Instance Identification: Each instance has a unique ID to prevent conflicts
+Key Features  
+-	1.	Atomic Operations: Uses MongoDB’s FindOneAndUpdate for atomic lock acquisition
+-	2.	Automatic Expiration: TTL index ensures locks don’t stay forever if a container crashes
+-	3.	Lock Extension: Can extend lock for long-running jobs
+-	4.	Instance Identification: Each instance has a unique ID to prevent conflicts
+
 This ensures only one replica executes the job at the scheduled time!​​​​​​​​​​​​​​​​
