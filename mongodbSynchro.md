@@ -5,7 +5,7 @@ Use MongoDB’s atomic operations to create a distributed lock that ensures only
 Implementation
 
 
-
+```cs
 public class MongoDistributedLock
 {
     private readonly IMongoCollection<LockDocument> _lockCollection;
@@ -121,10 +121,11 @@ public class LockDocument
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime ExpiresAt { get; set; }
 }
-
+```
 
 Usage in Your Job
 
+```cs
 public class ScheduledJobService : BackgroundService
 {
     private readonly MongoDistributedLock _lock;
@@ -192,7 +193,7 @@ public class ScheduledJobService : BackgroundService
         return targetTime;
     }
 }
-
+```
 
 Key Features
 	1.	Atomic Operations: Uses MongoDB’s FindOneAndUpdate for atomic lock acquisition
