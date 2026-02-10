@@ -1,7 +1,10 @@
 I’ll help you implement distributed job synchronization using MongoDB as a distributed lock mechanism. Here’s a robust solution:
-Basic Approach
+
+##Basic Approach
 Use MongoDB’s atomic operations to create a distributed lock that ensures only one instance runs the job at a time.
 Implementation
+
+
 
 public class MongoDistributedLock
 {
